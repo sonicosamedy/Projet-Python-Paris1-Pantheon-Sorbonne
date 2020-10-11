@@ -19,7 +19,8 @@ for i in np.arange(start=0,stop=data.shape[1]):
     plt.plot(data.index.values,data.iloc[:,i],marker="o",ls=' ')
     plt.show()
 #Ajouter Echantillonage 
-
+data_prd=data.sample(frac=0.2)#prendre 20% de la BDD
+data=data.iloc[data.index.difference(data_prd.index),]
 
 # Pour l'analyse bivarié 
 plt.figure(figsize=(10,10))
