@@ -50,3 +50,11 @@ plt.show()
 sns.pairplot(data)
 
 #Ajouter analyse multivarié (ex: race*university*approve)
+
+#Je veux afficher les stats descriptives sur les revenus  en fonctions de 
+#si les prêt a été approuvé ou non
+tab=[]
+tab.append(data.loc[data['approve']==0,'atotinc'].describe())
+tab.append(data.loc[data['approve']==1,'atotinc'].describe())
+print(tab)
+
