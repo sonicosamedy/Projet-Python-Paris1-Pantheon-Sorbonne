@@ -59,9 +59,17 @@ data.iloc[:,15].value_counts().plot.pie(subplots=True, figsize = (6, 6) , autopc
 #----------------------------------------------------------
 #                        Etape 4
 #                    Analyse Bivariée
-#----------------------------------------------------------    
-    
-#Optimiser les histogrammes ci-dessous
+#----------------------------------------------------------       
+#Matrice de corrélation
+plt.figure(figsize=(8,8))
+masque  =  np.tril(data.corr())
+sns.heatmap(data.corr(),annot=True,annot_kws={"size": 7}, vmin=-1, vmax=1,fmt='.2f',cmap= 'bwr' ,square=True,mask = masque)
+plt.show()      
+
+#Attention c'est très long a éxécuter !
+sns.pairplot(data)
+
+#OPTIMISER les histogrammes ci-dessous
 t6 = pd.crosstab(data.sex, data.approve, normalize=True)
 t6.plot.bar()
 t7 = pd.crosstab(data.race, data.approve, normalize=True)
@@ -69,15 +77,10 @@ t7.plot.bar()
 t8 = pd.crosstab(data.married, data.approve, normalize=True)
 t8.plot.bar()
 
-#Matrice de corrélation
-plt.figure(figsize=(10,10))
-masque  =  np.tril(data.corr())
-sns.heatmap(data.corr(),annot=True,vmin=-1, vmax=1,fmt='.2f',cmap= 'bwr' ,square=True,mask = masque)
-plt.show()    
-
-#Attention c'est très long a éxécuter !
-sns.pairplot(data)
-
+#----------------------------------------------------------
+#                        Etape 5
+#                   Analyse Multivariée
+#----------------------------------------------------------  
 #Ajouter analyse multivarié (ex: race*university*approve)
 
 #Je veux afficher les stats descriptives sur les revenus  en fonctions de 
@@ -87,3 +90,41 @@ tab.append(data.loc[data['approve']==0,'atotinc'].describe())
 tab.append(data.loc[data['approve']==1,'atotinc'].describe())
 print(tab)
 
+
+#----------------------------------------------------------
+#                        Etape 6
+#             Modelisation - Régression Logistique
+#----------------------------------------------------------  
+
+
+
+
+
+#----------------------------------------------------------
+#                        Etape 7
+#             Modelisation - Arbre de Décision
+#----------------------------------------------------------  
+
+
+
+
+
+#----------------------------------------------------------
+#                        Etape 8
+#             Modelisation - Forêts Aléatoire
+#---------------------------------------------------------- 
+
+
+
+
+#----------------------------------------------------------
+#                        Etape ???
+#             Modelisation - AUTRES METHODE ?????
+#---------------------------------------------------------- 
+
+
+
+#----------------------------------------------------------
+#                        Etape ???
+#            Comparaison des performances de prédictions
+#---------------------------------------------------------- 
