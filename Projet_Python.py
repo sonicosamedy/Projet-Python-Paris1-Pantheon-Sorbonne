@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 
 data = pd.read_csv('/Loan_data.csv')
 
@@ -30,13 +31,6 @@ plt.show()
 
 #Détection d'outliers
 data=data[(data["term"]<500)] 
-
-#----------------------------------------------------------
-#                        Etape 2
-#            Echantillonnage - Par Tirage stratifié
-#----------------------------------------------------------
-
-data, data_pred = train_test_split(data, test_size=0.2, random_state=5, stratify=data["approve"])
 
 #----------------------------------------------------------
 #                        Etape 3
@@ -91,12 +85,24 @@ tab.append(data.loc[data['approve']==1,'atotinc'].describe())
 print(tab)
 
 
+
+#----------------------------------------------------------
+#                        Etape 2
+#            Echantillonnage - Par Tirage stratifié
+#----------------------------------------------------------
+
+data_X,data_predX, data_y,  data_predy = train_test_split(data.drop(['approve'], axis=1),data["approve"], test_size=0.2, random_state=5, stratify=data["approve"])
+#Création des variables dummies
+data_X = pd.get_dummies(data_X)
+data_predX=pd.get_dummies(data_predX)
+
 #----------------------------------------------------------
 #                        Etape 6
 #             Modelisation - Régression Logistique
 #----------------------------------------------------------  
 
-
+logit = LogisticRegression()
+modellogit=logit.fit(data_X,data_y)
 
 
 
