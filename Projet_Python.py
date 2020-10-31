@@ -15,9 +15,16 @@ data.head()
 #Pour analyse univarié
 #Ajouter histogramme ou boxplot
 #Ajouter détection de outliers
+plt.close()
+plt.figure(1)
+plt.figure(figsize=(10,12))
 for i in np.arange(start=0,stop=data.shape[1]):
-    plt.plot(data.index.values,data.iloc[:,i],marker="o",ls=' ')
-    plt.show()
+    plt.subplot(7, 3, i+1)
+    plt.plot(data.index.values,data.iloc[:,i],marker="o",ls=' ',alpha=0.7,color='#0f6f80')
+    plt.xlabel('Indices d\'observation ')
+    plt.ylabel(data.columns[i])
+plt.tight_layout() 
+plt.show()
 
 t1 = pd.crosstab(data.sex, "freq")
 t1.plot.pie(subplots=True, figsize = (6, 6))
