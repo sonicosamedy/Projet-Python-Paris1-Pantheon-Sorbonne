@@ -10,7 +10,7 @@ data.info()
 
 data.isnull().sum()
 
-data=data.dropna()
+data=data.dropna() #Suppression de 26 lignes
 data.head()
 #Pour analyse univarié
 #Ajouter histogramme ou boxplot
@@ -23,8 +23,24 @@ for i in np.arange(start=0,stop=data.shape[1]):
     plt.plot(data.index.values,data.iloc[:,i],marker="o",ls=' ',alpha=0.7,color='#0f6f80')
     plt.xlabel('Indices d\'observation ')
     plt.ylabel(data.columns[i])
+plt.tight_layout() #Attention variable term il y a 3 outliers a retirer ! (ou modifier)
+plt.show()
+
+
+col=[0,8,9,10,16,17]
+j=1
+plt.figure(figsize=(8,10))
+for i in col:
+    plt.subplot(2, 3, j)
+    j=j+1
+    data.iloc[:,i].value_counts().plot.pie(subplots=True, figsize = (3, 3) , autopct='%1.1f%%',startangle=90, colors = [ '#ae7181', '#a2bffe' ,'#a2cffe'])    
 plt.tight_layout() 
 plt.show()
+
+#Si possible améliorer ce plot.pie !
+data.iloc[:,15].value_counts().plot.pie(subplots=True, figsize = (6, 6) , autopct='%1.0f%%',startangle=90, colors = [ '#ae7181','#d58a94' ,'#c292a1', '#a2bffe' ,'#a2cffe','#658cbb','#3b5b92','#014182'])
+   
+  
 
 t1 = pd.crosstab(data.sex, "freq")
 t1.plot.pie(subplots=True, figsize = (6, 6))
