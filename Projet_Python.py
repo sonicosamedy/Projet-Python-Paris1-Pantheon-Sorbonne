@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
 
 data = pd.read_csv('/Loan_data.csv')
 
@@ -33,7 +34,7 @@ plt.show()
 data=data[(data["term"]<500)] 
 
 #----------------------------------------------------------
-#                        Etape 3
+#                        Etape 2
 #                   Analyse Univariée
 #----------------------------------------------------------
 col=[0,8,9,10,16,17]
@@ -51,7 +52,7 @@ data.iloc[:,15].value_counts().plot.pie(subplots=True, figsize = (6, 6) , autopc
  
     
 #----------------------------------------------------------
-#                        Etape 4
+#                        Etape 3
 #                    Analyse Bivariée
 #----------------------------------------------------------       
 #Matrice de corrélation
@@ -72,7 +73,7 @@ t8 = pd.crosstab(data.married, data.approve, normalize=True)
 t8.plot.bar()
 
 #----------------------------------------------------------
-#                        Etape 5
+#                        Etape 4
 #                   Analyse Multivariée
 #----------------------------------------------------------  
 #Ajouter analyse multivarié (ex: race*university*approve)
@@ -87,7 +88,7 @@ print(tab)
 
 
 #----------------------------------------------------------
-#                        Etape 2
+#                        Etape 5
 #            Echantillonnage - Par Tirage stratifié
 #----------------------------------------------------------
 
@@ -103,7 +104,21 @@ data_predX=pd.get_dummies(data_predX)
 
 logit = LogisticRegression()
 modellogit=logit.fit(data_X,data_y)
-
+#Matrice de confusion
+conf = confusion_matrix(data_predy, modellogit.predict(data_predX))
+conf
+cf = pd.DataFrame(conf, columns=[modellogit.classes_])
+cf.index = [ modellogit.classes_]
+cf
+score = modellogit.decision_function(data_predX)
+df = {'score':score,'approve':data_predy,'pred':modellogit.predict(data_predX)}
+df=pd.DataFrame(data=df)
+#Bcp de surapprentissage à corriger & OPTIMISER le graphique 
+ax = df[df['approve'] == 1]['score'].hist(bins=25, figsize=(6,3), label='1', alpha=0.5)
+df[df['approve'] == 0]['score'].hist(bins=25, ax=ax, label='0', alpha=0.5)
+ax.set_title("Distribution des scores pour les deux classes")
+ax.plot([0, 0], [0, 55], 'g--', label="SEUIL ?")
+ax.legend();
 
 
 #----------------------------------------------------------
