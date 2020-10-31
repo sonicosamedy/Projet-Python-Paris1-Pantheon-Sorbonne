@@ -6,7 +6,7 @@ Nous allons expliquer les données que nous retrouverons dans notre base de donn
 
 Approve : Cette variable binaire nous informe si le crédit a été approuvé ou non, 1 s’il a été approuvé, 0 sinon.
 
-Loanamt : Nous donne le montant du prêt immobilier. 
+Loanamt : Nous donne le montant du prêt immobilier (en millier de dollar). 
 
 Term : Nous donne la durée du prêt en terme de mois. 
 
@@ -14,7 +14,7 @@ Caution : Une variable binaire qui affiche 1 si le client a eu une mise en garde
 
 Atotinc : Le revenu mensuel total. 
 
-Cototinc : Coapp revenu mensuel total 
+Cototinc : Coapp revenu mensuel total. 
 
 Hart : C’est le ratio des frais de logement, pourcentage total sur revenu.
 
