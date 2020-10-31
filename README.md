@@ -12,34 +12,34 @@ Term : Nous donne la durée du prêt en terme de mois.
 
 Caution : Une variable binaire qui affiche 1 si le client a eu une mise en garde. 
 
-Atotinc : Le revenu mensuel total. 
+Atotinc : Le revenu mensuel total de la personne demandant le prêt. 
 
 Cototinc : Coapp revenu mensuel total. 
 
-Hart : C’est le ratio des frais de logement, pourcentage total sur revenu.
+Hart : Ratio des frais de logement, pourcentage total sur revenu.
 
-Obrat : Autre obligations, en pourcentage total sur revenu
+Obrat : Autre dépenses, en pourcentage total sur revenu.
 
-Sex : ben sex 
+Sex : Sexe. 
 
-University : Est-ce qu'il va à l'université 
+University : Variable bianaire s'il va à l'université.
 
-Race : nous donne son ethnie 
+Race : Variable factorrielle qui renseigne l'ethnie (Black, Hispanic, White).
 
-Married : nous informe s’il est marié ou non. 
+Married : Variable bianaire qui informe s’il est marié ou non. 
 
-Dep : Le nombre de personne à sa charge
+Dep : Le nombre de personne à sa charge.
 
-Exper : Pas d’info 
+Exper : Nombre d'année d'expérience professionnel.
 
-Self : 1 si indépendant 
+Self : Variable binaire indiquant s'il s'agit d'un autoentrepreneur.
 
-Score : Pas d’info
+Score : Variable factorielle de 0 à 9 indiquant le score de solvabilité.
 
-Delinq : Pas d’info
+Delinq : Variable Binaire Pas d’info
 
-Mortperf : Pas de retard de paiement 
+Mortperf : Variable Binaire indiquant qu'il n'y a aucun paiement hypothécaire en retard.
 
-Mortlat1 : 1 ou 2 retards de paiement 
+Mortlat1 : Variable Binaire indiquant qu'il y a eu 1 ou 2 retards de paiement.
 
-Mortlat2 : Plus de deux retards de paiement 
+Mortlat2 : Variable Binaire indiquant qu'il y a eu plus de deux retards de paiement.
