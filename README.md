@@ -36,7 +36,7 @@ Self : Variable binaire indiquant s'il s'agit d'un autoentrepreneur.
 
 Score : Variable factorielle de 0 à 9 indiquant le score de solvabilité.
 
-Delinq : Variable Binaire Pas d’info
+Delinq : Variable Binaire indiquant s'il n'y a pas d'historique de non-remboursement de crédit à la consommation.
 
 Mortperf : Variable Binaire indiquant qu'il n'y a aucun paiement hypothécaire en retard.
 
