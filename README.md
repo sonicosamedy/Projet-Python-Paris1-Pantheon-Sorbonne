@@ -20,7 +20,7 @@ Hart : Ratio des frais de logement, pourcentage total sur revenu.
 
 Obrat : Autre dépenses, en pourcentage total sur revenu.
 
-Sex : Sexe. 
+Sex : Variable factorielle (Female, male). 
 
 University : Variable bianaire s'il va à l'université.
 
