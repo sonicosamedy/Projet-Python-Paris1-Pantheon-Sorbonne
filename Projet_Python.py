@@ -1,10 +1,14 @@
 import pandas as pd
 import numpy as np
+import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
+from imblearn.over_sampling import SMOTE
+from sklearn.metrics import classification_report
+
 
 data = pd.read_csv('/Loan_data.csv')
 
@@ -110,20 +114,25 @@ print(os_data_y.value_counts())
 logit = sm.Logit(os_data_y, os_data_X.astype(float))
 result=logit.fit()
 print(result.summary2())
-#FAIRE SELECTION DE VAR ICI
 
-logit = LogisticRegression()
-modellogit=logit.fit(data_X,data_y)
-#Matrice de confusion
-conf = confusion_matrix(data_predy, modellogit.predict(data_predX))
-conf
-cf = pd.DataFrame(conf, columns=[modellogit.classes_])
-cf.index = [ modellogit.classes_]
+#
+#FAIRE SELECTION DE VAR ICI
+#
+
+#Prediction
+logreg = LogisticRegression()
+modellogit=logreg.fit(os_data_X,os_data_y)
+y_pred=logreg.predict(data_predX)
+
+conf = confusion_matrix(data_predy, logreg.predict(data_predX))
+cf = pd.DataFrame(conf, columns=[logreg.classes_])
+cf.index = [ logreg.classes_]
 cf
-score = modellogit.decision_function(data_predX)
-df = {'score':score,'approve':data_predy,'pred':modellogit.predict(data_predX)}
+
+score = logreg.decision_function(data_predX)
+df = {'score':score,'approve':data_predy,'pred':logreg.predict(data_predX)}
 df=pd.DataFrame(data=df)
-#Bcp de surapprentissage à corriger & OPTIMISER le graphique 
+
 ax = df[df['approve'] == 1]['score'].hist(bins=25, figsize=(6,3), label='1', alpha=0.5)
 df[df['approve'] == 0]['score'].hist(bins=25, ax=ax, label='0', alpha=0.5)
 ax.set_title("Distribution des scores pour les deux classes")
