@@ -96,11 +96,21 @@ data_X,data_predX, data_y,  data_predy = train_test_split(data.drop(['approve'],
 #Création des variables dummies
 data_X = pd.get_dummies(data_X)
 data_predX=pd.get_dummies(data_predX)
+#Rééquilibrage de la BDD
+os = SMOTE(random_state=1)
+os_data_X,os_data_y=os.fit_sample(data_X, data_y)
+print("Longueur de la nouvelle BDD",len(os_data_X))
+print(os_data_y.value_counts())
 
 #----------------------------------------------------------
 #                        Etape 6
 #             Modelisation - Régression Logistique
 #----------------------------------------------------------  
+
+logit = sm.Logit(os_data_y, os_data_X.astype(float))
+result=logit.fit()
+print(result.summary2())
+#FAIRE SELECTION DE VAR ICI
 
 logit = LogisticRegression()
 modellogit=logit.fit(data_X,data_y)
