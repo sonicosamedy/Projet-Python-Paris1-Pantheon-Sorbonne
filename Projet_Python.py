@@ -23,36 +23,181 @@ data=data.dropna() #Suppression de 26 lignes
 #   Visualisation des données pour la détection d'outlier
 #
 #----------------------------------------------------------
+#Cretion d'une novelle table contenant seulement les variables quantitatives
+col = [ 1, 2, 4, 5, 6, 7, 12, 13]
+print(col)
+
+data_quanti = data1.iloc[: , col]
+data_quanti.shape
+data_quanti.info()
+
+
+#Boxplot pour les variables quatitatives
 plt.close()
 plt.figure(1)
 plt.figure(figsize=(10,12))
-for i in np.arange(start=0,stop=data.shape[1]):
-    plt.subplot(7, 3, i+1)
-    plt.plot(data.index.values,data.iloc[:,i],marker="o",ls=' ',alpha=0.7,color='#0f6f80')
-    plt.xlabel('Indices d\'observation ')
-    plt.ylabel(data.columns[i])
+for i in np.arange(start=0,stop=data_quanti.shape[1]):
+    plt.subplot(4, 2, i+1)
+    plt.boxplot(data_quanti.iloc[:,i])
+    plt.xlabel(data_quanti.columns[i])
 plt.tight_layout()
-plt.show()
+plt.show() 
+
+#Nous remarquons une valeur aberrante pour la variable term
+#Faisons une histogramme de la variable term pour mieux identifier cette valeur
+plt.hist(data_quanti.iloc[:,1])
+
+data_quanti.iloc[:,1].describe()
 
 #Détection d'outliers
-data=data[(data["term"]<500)] 
+data2=data1[(data1["term"]<500)] 
+data2.shape
+
 
 #----------------------------------------------------------
 #                        Etape 2
 #                   Analyse Univariée
 #----------------------------------------------------------
-col=[0,8,9,10,16,17]
+#---2.1. Analyse univariee des variables quantitatives----##
+
+# 2.1.1. Parametres des tendances centrales et indicateur de dispersion.
+col = [ 1, 2, 4, 5, 6, 7, 12, 13]
+data2.iloc[: , col].describe()
+
+#2.1.2. Representation graphique des variables quantitatives
+
+# Graphique: Distribution de la variable loanamt
+plt.hist(data2.iloc[: , 1], bins=20, color='red')
+plt.xlim(2, 980)
+plt.ylim(0,900)
+plt.xlabel('Montant du pret')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable loanamt')
+plt.show()
+
+# Graphique: Distribution de la variable term
+plt.hist(data2.iloc[: , 2], bins=20, color='red')
+plt.xlim(6, 480)
+plt.ylim(0,1900)
+plt.xlabel('Durée du pret en mois')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable term')
+plt.show()
+
+
+# Graphique: Distribution de la variable atotinc
+plt.hist(data2.iloc[: , 4], bins=20, color='red')
+plt.xlim(0, 81000)
+plt.ylim(0,1200)
+plt.xlabel('Revenu mensuel total')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable atotinc')
+plt.show()
+
+# Graphique: Distribution de la variable cototinc
+plt.hist(data2.iloc[: , 5], bins=20, color='red')
+plt.xlim(0, 41700)
+plt.ylim(0,1200)
+plt.xlabel('Coapp revenu mensuel total.')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable cototinc')
+plt.show()
+
+# Graphique: Distribution de la variable hrat
+plt.hist(data2.iloc[: , 6], bins=70, color='red')
+plt.xlim(0, 75)
+plt.ylim(0,200)
+plt.xlabel('Ratio fais logement/ revenu total.')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable hrat')
+plt.show()
+
+# Graphique: Distribution de la variable obrat
+plt.hist(data2.iloc[: , 7], bins=70, color='red')
+plt.xlim(0, 100)
+plt.ylim(0,250)
+plt.xlabel('Ratio autres dépenses/ revenu total.')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable obrat')
+plt.show()
+
+
+# Graphique: Distribution de la variable dep
+plt.hist(data2.iloc[: , 12], bins=40, color='red')
+plt.xlim(0, 9)
+plt.ylim(0,1250)
+plt.xlabel('Nombre de dépendants.')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable dep')
+plt.show()
+
+# Graphique: Distribution de la variable expr
+plt.hist(data2.iloc[: , 13], bins=10, color='red')
+plt.xlim(0, 10)
+plt.ylim(0,1800)
+plt.xlabel('Nombre d\'années d\'experience professionnel.')
+plt.ylabel('Effectif')
+plt.title('Distribution de la variable exr')
+plt.show()
+
+#---2.2. Analyse univariee des variables qualitatives----##
+
+#Creation d'une novelle table contenant seulement les variables qualitatives
+col1=[0,3,8,9,10,11,14,15,16,17,18,19]
+data_quali = data2.iloc[:,col1]
+data_quali.shape
+data_quali.info()
+
+#Renommer les modalités des variables binaires
+data_quali["Approve_rec"] = data_quali.iloc[:,0].replace({1: "Oui", 0: "Non"})
+data_quali["caution_rec"] = data_quali.iloc[:,1].replace({1: "Une Miise en Garde", 0: "Pas de Mise en Garde"})
+data_quali["uni_rec"] = data_quali.iloc[:,3].replace({1: "Oui", 0: "Non"})
+data_quali["married_rec"] = data_quali.iloc[:,5].replace({1: "Oui", 0: "Non"})
+data_quali["self_rec"] = data_quali.iloc[:,6].replace({1: "Oui", 0: "Non"})
+data_quali["delinq_rec"] = data_quali.iloc[:,8].replace({1: "Oui", 0: "Non"})
+data_quali["mortperf_rec"] = data_quali.iloc[:,9].replace({1: "Oui", 0: "Non"})
+data_quali["mortlat1_rec"] = data_quali.iloc[:,10].replace({1: "Oui", 0: "Non"})
+data_quali["mortlat2_rec"] = data_quali.iloc[:,12].replace({1: "Oui", 0: "Non"})
+
+data_quali.info()
+
+# Tri à plat des variables
+col3=[2,4,7,12,13,14,15,16,17,18,19,20]
+for i in col3:
+    tri_plat=data_quali.iloc[:,i].value_counts()
+    print('Tri à plat de la variable',data_quali.columns[i],':','\n', tri_plat)
+    print('\n')
+
+
+#Pie des varibales qualitatives binaires
+col3=[2,12,13,14,15,16,17,18,19,20]
+
 j=1
 plt.figure(figsize=(8,10))
-for i in col:
-    plt.subplot(2, 3, j)
+for i in col3:
+    plt.subplot(4, 3, j)
     j=j+1
-    data.iloc[:,i].value_counts().plot.pie(subplots=True, figsize = (3, 3) , autopct='%1.1f%%',startangle=90, colors = [ '#ae7181', '#a2bffe' ,'#a2cffe'])    
+    data_quali.iloc[:,i].value_counts().plot.pie(subplots=True, figsize = (4, 3) , autopct='%1.1f%%',startangle=90, colors = [ 'blue', 'yellow'])
+    centre_circle = plt.Circle((0,0),0.5,color='black', fc='white',linewidth=0)
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle) 
 plt.tight_layout() 
 plt.show()
 
-#Si possible améliorer ce plot.pie !
-data.iloc[:,15].value_counts().plot.pie(subplots=True, figsize = (6, 6) , autopct='%1.0f%%',startangle=90, colors = [ '#ae7181','#d58a94' ,'#c292a1', '#a2bffe' ,'#a2cffe','#658cbb','#3b5b92','#014182'])
+
+# Bar plot de la variable race 
+plt.bar(['White', 'Black', 'Hispan'], [1658, 193, 108], color=['red', 'blue','yellow'], width=0.8)
+plt.ylabel('Effectif')
+plt.title('Repartition des emprunteurs par race')
+plt.show()
+
+
+# Bar plot de la variable score
+plt.bar([0,1,2,3,4,5,6,8,9], [174,970,610,91,101,4,7,1,1], color=[ 'blue'], width=0.8)
+plt.ylabel('Effectif')
+plt.xlabel('Score')
+plt.title('Repartition des emprunteurs par score')
+plt.show()
  
     
 #----------------------------------------------------------
