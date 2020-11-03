@@ -299,7 +299,45 @@ ax.legend();
 #             Modelisation - Forêts Aléatoire
 #---------------------------------------------------------- 
 
+data_X,data_predX, data_y,  data_predy = train_test_split(data.drop(['approve'], axis=1),data["approve"], test_size=0.2, random_state=5, stratify=data["approve"])
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.90)
 
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier(n_estimators=10)
+clf.fit(data_X, data_y)
+
+# Problème il me dit que j'ai des NaN
+
+y_pred = clf.predict(data_predX)
+accuracy = clf.score(data_predX, data_predy)
+print(accuracy)
+
+############################# sur le site de scikit learn
+
+#from sklearn.ensemble import RandomForestClassifier
+#X = [[0, 0], [1, 1]]
+#Y = [0, 1]
+#clf = RandomForestClassifier(n_estimators=10)
+#clf = clf.fit(X, Y)
+
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+clf = DecisionTreeClassifier(max_depth=None, min_samples_split=2, random_state=0)
+scores = cross_val_score(clf, data_X, data_y, cv=5) #j'ai mis le cv par défaut mais peut etre que je devrai changer
+scores.mean()
+
+
+clf = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=0)
+scores = cross_val_score(clf, data_X, data_y, cv=5)
+scores.mean()
+
+
+clf = ExtraTreesClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=0)
+scores = cross_val_score(clf, data_X, data_y, cv=5)
+#scores.mean() > 0.999 changer la valeur
 
 
 #----------------------------------------------------------
