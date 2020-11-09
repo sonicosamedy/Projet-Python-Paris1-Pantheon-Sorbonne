@@ -214,12 +214,29 @@ plt.show()
 sns.pairplot(data)
 
 #OPTIMISER les histogrammes ci-dessous
-t6 = pd.crosstab(data.sex, data.approve, normalize=True)
-t6.plot.bar()
-t7 = pd.crosstab(data.race, data.approve, normalize=True)
+t1 = pd.crosstab(data.race, data.approve, normalize=True) #diagramme en barres
+t1.plot.bar()
+
+t2 = pd.crosstab(data.race, data.approve, normalize = "index") #pourcentages
+t2
+
+t3 = pd.crosstab(data.sex, data.approve, normalize=True)
+t3.plot.bar()
+
+t4 = pd.crosstab(data.sex, data.approve, normalize = "index")
+t4
+
+t5 = pd.crosstab(data.married, data.approve, normalize=True)
+t5.plot.bar()
+
+t6 = pd.crosstab(data.married, data.approve, normalize = "index")
+t6
+
+t7 = pd.crosstab(data.university, data.approve, normalize=True)
 t7.plot.bar()
-t8 = pd.crosstab(data.married, data.approve, normalize=True)
-t8.plot.bar()
+
+t8 = pd.crosstab(data.university, data.approve, normalize = "index")
+t8
 
 #----------------------------------------------------------
 #                        Etape 4
