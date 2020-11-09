@@ -214,6 +214,7 @@ plt.show()
 sns.pairplot(data)
 
 #OPTIMISER les histogrammes ci-dessous
+#https://fxjollois.github.io/cours-2016-2017/analyse-donnees-massives-tp5.html
 t1 = pd.crosstab(data.race, data.approve, normalize=True) #diagramme en barres
 t1.plot.bar()
 
