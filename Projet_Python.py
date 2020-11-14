@@ -310,6 +310,14 @@ cf = pd.DataFrame(conf, columns=[logreg.classes_])
 cf.index = [ logreg.classes_]
 cf
 
+fig, ax = plt.subplots() #Affichage a changer !
+sns.heatmap(pd.DataFrame(conf), annot=True, cmap="YlGnBu" ,fmt='g')
+ax.xaxis.set_label_position("top")
+plt.tight_layout()
+plt.title('Confusion matrix', y=1.1)
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+
 score = logreg.decision_function(select_test)
 df = {'score':score,'approve':test_y,'pred':logreg.predict(select_test)}
 df=pd.DataFrame(data=df)
