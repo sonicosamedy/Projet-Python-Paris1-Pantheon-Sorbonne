@@ -6,8 +6,11 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
+from sklearn import metrics
 from imblearn.over_sampling import SMOTE
-from sklearn.metrics import classification_report
+import imblearn
+import seaborn 
+
 
 
 data = pd.read_csv('/Loan_data.csv')
@@ -259,15 +262,17 @@ print(tab)
 #            Echantillonnage - Par Tirage stratifié
 #----------------------------------------------------------
 
-data_X,data_predX, data_y,  data_predy = train_test_split(data.drop(['approve'], axis=1),data["approve"], test_size=0.2, random_state=5, stratify=data["approve"])
 #Création des variables dummies
-data_X = pd.get_dummies(data_X)
-data_predX=pd.get_dummies(data_predX)
-#Rééquilibrage de la BDD
+data['exper'] = data['exper'].astype(str)
+data = pd.get_dummies(data)
+# Echantillonnage
+data_X,test_X, data_y,  test_y = train_test_split(data.drop(['approve'], axis=1),data["approve"], test_size=0.2, random_state=5, stratify=data["approve"])
+#Rééquilibrage de la BDD d'entrainement
 os = SMOTE(random_state=1)
 os_data_X,os_data_y=os.fit_sample(data_X, data_y)
 print("Longueur de la nouvelle BDD",len(os_data_X))
 print(os_data_y.value_counts())
+
 
 #----------------------------------------------------------
 #                        Etape 6
@@ -278,22 +283,33 @@ logit = sm.Logit(os_data_y, os_data_X.astype(float))
 result=logit.fit()
 print(result.summary2())
 
-#
-#FAIRE SELECTION DE VAR ICI
-#
 
-#Prediction
+#  Selection des variables (Amélioration du critère BIC)
+
+select_data=os_data_X.drop(['exper_9','dep','self','mortperf','mortlat2','mortlat1','hrat','loanamt','cototinc'], axis='columns')
+select_test=test_X.drop(['exper_9','dep','self','mortperf','mortlat2','mortlat1','hrat','loanamt','cototinc'], axis='columns')
+
+logit2 = sm.Logit(os_data_y,select_data.astype(float))
+result2=logit2.fit()
+print(result2.summary2())
+
+#  Prédiction - Étude des performances de prédiction
+
+logit2 = sm.Logit(os_data_y,select_data.astype(float))
+result2=logit2.fit()
+print(result2.summary2())
+
 logreg = LogisticRegression()
-modellogit=logreg.fit(os_data_X,os_data_y)
-y_pred=logreg.predict(data_predX)
+modellogit=logreg.fit(select_data,os_data_y)
+y_pred=logreg.predict(select_test)
 
-conf = confusion_matrix(data_predy, logreg.predict(data_predX))
+conf = confusion_matrix(test_y, logreg.predict(select_test))
 cf = pd.DataFrame(conf, columns=[logreg.classes_])
 cf.index = [ logreg.classes_]
 cf
 
-score = logreg.decision_function(data_predX)
-df = {'score':score,'approve':data_predy,'pred':logreg.predict(data_predX)}
+score = logreg.decision_function(select_test)
+df = {'score':score,'approve':test_y,'pred':logreg.predict(select_test)}
 df=pd.DataFrame(data=df)
 
 ax = df[df['approve'] == 1]['score'].hist(bins=25, figsize=(6,3), label='1', alpha=0.5)
@@ -301,6 +317,22 @@ df[df['approve'] == 0]['score'].hist(bins=25, ax=ax, label='0', alpha=0.5)
 ax.set_title("Distribution des scores pour les deux classes")
 ax.plot([0, 0], [0, 55], 'g--', label="SEUIL ?")
 ax.legend();
+
+
+ax = seaborn.distplot(df[df['approve'] == 1]['score'], rug=True,bins=20, hist=True, label="1")
+seaborn.distplot(df[df['approve'] == 0]['score'], rug=True, hist=True,bins=20, ax=ax, label="0")
+ax.set_title("Distribution des scores pour les deux classes")
+ax.legend()
+
+
+#  Courbe ROC
+
+pred_proba = logreg.predict_proba(select_test)[::,1]
+fpr, tpr, _ = metrics.roc_curve(test_y,  pred_proba)
+auc = metrics.roc_auc_score(test_y, pred_proba)
+plt.plot(fpr,tpr,label="Courbe ROC, auc="+str(auc))
+plt.legend(loc=4)
+plt.show()
 
 
 #----------------------------------------------------------
