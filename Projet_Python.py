@@ -10,7 +10,9 @@ from sklearn import metrics
 from imblearn.over_sampling import SMOTE
 import imblearn
 import seaborn 
-
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import f1_score
+from sklearn.metrics import auc
 
 
 data = pd.read_csv('/Loan_data.csv')
@@ -326,13 +328,24 @@ ax.legend()
 
 
 #  Courbe ROC
-
 pred_proba = logreg.predict_proba(select_test)[::,1]
 fpr, tpr, _ = metrics.roc_curve(test_y,  pred_proba)
 auc = metrics.roc_auc_score(test_y, pred_proba)
 plt.plot(fpr,tpr,label="Courbe ROC, auc="+str(auc))
 plt.legend(loc=4)
 plt.show()
+
+#  Courbe Rappel Précision
+lr_precision, lr_recall, _ = precision_recall_curve(test_y, pred_proba)
+lr_f1, lr_auc = f1_score(test_y, y_pred), auc(lr_recall, lr_precision)
+print('Logistic: f1=%.3f auc=%.3f' % (lr_f1, lr_auc))
+plt.plot(lr_recall, lr_precision, label='Courbe Rappel-Précision, PR_auc='+str(lr_auc))
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.legend()
+plt.show()
+
+
 
 
 #----------------------------------------------------------
