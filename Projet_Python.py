@@ -297,6 +297,88 @@ plt.show()
 #                        Etape 7
 #             Modelisation - Arbre de Décision
 #----------------------------------------------------------  
+#Nous cherchons à expliquer la variable approve avec les variable qualitative
+col1=[0,3,8,9,10,11,14,15,16,17,18,19]
+df = data2.iloc[:,col1]
+
+#vérification de la version de scikit-learn
+import sklearn
+print(sklearn.__version__)
+
+#Dimension du dataframe :
+df.shape
+
+#Affichages des premières lignes 
+df.head()
+
+#Affichage des informations sur le type de variables :
+df.info()
+
+#Vérifions la distribution absolue des approve
+df.approve.value_counts()
+#Distribution relative 
+df.approve.value_counts(normalize=True)
+'''
+Ces informations sont importantes lorsque nous aurons à inspecter les résultats.
+'''
+
+'''
+Je rencontre un soucis avec la variable de genre : sex 
+qui est en string et la fonction a l'air de ne pas apprécier je vais la convertir
+à l'aide d'un mapping 
+'''
+df['sex'] = df['sex'].map({'Male': 1,'Female': 0})
+df.sex.value_counts()
+'''
+J'ai le même soucis avec race : 
+    White = 1
+    Black = 2
+    Hispan = 3
+'''
+df['race'] = df['race'].map({'White': 1,'Black': 2, 'Hispan':3})
+df.race.value_counts()
+
+#Subdiviser les données en échantillons d'apprentissage et de test
+#Nous nous allons prendre 70% pour le modèle de train et 30% pour le test
+from sklearn.model_selection import train_test_split
+
+dfTrain, dfTest = train_test_split(df,test_size=588,random_state=1,stratify=data2.approve)
+
+#Vérification des dimensions 
+dfTrain.shape #(1371, 12)
+dfTest.shape #(588, 12)
+
+#Vérification des distribution de approve
+dfTrain.approve.value_counts(normalize=True)
+dfTest.approve.value_counts(normalize=True)
+'''
+Les proportions sont respecté
+'''
+
+#instanciation de l'arbre
+from sklearn.tree import DecisionTreeClassifier
+arbreFirst = DecisionTreeClassifier(min_samples_split=150,min_samples_leaf=50)
+#Je ne sais pas comment définir ces 2 paramètres 
+
+#construction de l'arbre
+'''
+Je veux enlever la première colonne pour définir ma matrice X des variables prédictives 
+et le vecteur Y la variable cible 
+dfTrain.iloc[:,1:].columns
+dfTrain.columns
+'''
+
+arbreFirst.fit(X = dfTrain.iloc[:,1:], y = dfTrain.approve) 
+
+#affichage graphique de l'arbre - depuis sklearn 0.21
+ #https://scikit-learn.org/stable/modules/generated/sklearn.tree.plot_tree.html#sklearn.tree.plot_tree 
+from sklearn.tree import plot_tree
+plot_tree(arbreFirst,feature_names = list(data2.columns[1:]),filled=True)
+
+#affichage plus grand pour une meilleure lisibilité
+plt.figure(figsize=(10,10))
+plot_tree(arbreFirst,feature_names = list(data2.columns[1:]),filled=True) 
+plt.show()
 
 
 
