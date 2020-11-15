@@ -70,79 +70,16 @@ col = [ 1, 2, 4, 5, 6, 7, 12, 13]
 data2.iloc[: , col].describe()
 
 #2.1.2. Representation graphique des variables quantitatives
-
-# Graphique: Distribution de la variable loanamt
-plt.hist(data2.iloc[: , 1], bins=20, color='red')
-plt.xlim(2, 980)
-plt.ylim(0,900)
-plt.xlabel('Montant du pret')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable loanamt')
-plt.show()
-
-# Graphique: Distribution de la variable term
-plt.hist(data2.iloc[: , 2], bins=20, color='red')
-plt.xlim(6, 480)
-plt.ylim(0,1900)
-plt.xlabel('Durée du pret en mois')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable term')
-plt.show()
-
-
-# Graphique: Distribution de la variable atotinc
-plt.hist(data2.iloc[: , 4], bins=20, color='red')
-plt.xlim(0, 81000)
-plt.ylim(0,1200)
-plt.xlabel('Revenu mensuel total')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable atotinc')
-plt.show()
-
-# Graphique: Distribution de la variable cototinc
-plt.hist(data2.iloc[: , 5], bins=20, color='red')
-plt.xlim(0, 41700)
-plt.ylim(0,1200)
-plt.xlabel('Coapp revenu mensuel total.')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable cototinc')
-plt.show()
-
-# Graphique: Distribution de la variable hrat
-plt.hist(data2.iloc[: , 6], bins=70, color='red')
-plt.xlim(0, 75)
-plt.ylim(0,200)
-plt.xlabel('Ratio fais logement/ revenu total.')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable hrat')
-plt.show()
-
-# Graphique: Distribution de la variable obrat
-plt.hist(data2.iloc[: , 7], bins=70, color='red')
-plt.xlim(0, 100)
-plt.ylim(0,250)
-plt.xlabel('Ratio autres dépenses/ revenu total.')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable obrat')
-plt.show()
-
-
-# Graphique: Distribution de la variable dep
-plt.hist(data2.iloc[: , 12], bins=40, color='red')
-plt.xlim(0, 9)
-plt.ylim(0,1250)
-plt.xlabel('Nombre de dépendants.')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable dep')
-plt.show()
-
-# Graphique: Distribution de la variable expr
-plt.hist(data2.iloc[: , 13], bins=10, color='red')
-plt.xlim(0, 10)
-plt.ylim(0,1800)
-plt.xlabel('Nombre d\'années d\'experience professionnel.')
-plt.ylabel('Effectif')
-plt.title('Distribution de la variable exr')
+# Graphique: Distribution
+b=[30,50,100,70,70,70,20,15]
+plt.figure(figsize=(15,6))
+for i in np.arange(start=0,stop=data_quanti.shape[1]):
+    plt.subplot(2, 4, i+1)
+    plt.hist(data_quanti.iloc[: , i], bins=b[i], color='darkseagreen')
+    plt.xlabel(data_quanti.columns[i])
+    plt.ylabel('Effectif')
+    plt.title('Distribution de la variable ' + data_quanti.columns[i])
+plt.tight_layout()
 plt.show()
 
 #---2.2. Analyse univariee des variables qualitatives----##
@@ -211,12 +148,12 @@ plt.show()
 #----------------------------------------------------------       
 #Matrice de corrélation
 plt.figure(figsize=(8,8))
-masque  =  np.tril(data.corr())
-sns.heatmap(data.corr(),annot=True,annot_kws={"size": 7}, vmin=-1, vmax=1,fmt='.2f',cmap= 'bwr' ,square=True,mask = masque)
+masque  =  np.tril(data2.corr())
+sns.heatmap(data2.corr(),annot=True,annot_kws={"size": 7}, vmin=-1, vmax=1,fmt='.2f',cmap= 'bwr' ,square=True,mask = masque)
 plt.show()      
 
 #Attention c'est très long a éxécuter !
-sns.pairplot(data)
+sns.pairplot(data2)
 
 #OPTIMISER les histogrammes ci-dessous
 #https://fxjollois.github.io/cours-2016-2017/analyse-donnees-massives-tp5.html
@@ -265,10 +202,10 @@ print(tab)
 #----------------------------------------------------------
 
 #Création des variables dummies
-data['exper'] = data['exper'].astype(str)
-data = pd.get_dummies(data)
+data2['exper'] = data2['exper'].astype(str)
+data2 = pd.get_dummies(data2)
 # Echantillonnage
-data_X,test_X, data_y,  test_y = train_test_split(data.drop(['approve'], axis=1),data["approve"], test_size=0.2, random_state=5, stratify=data["approve"])
+data_X,test_X, data_y,  test_y = train_test_split(data2.drop(['approve'], axis=1),data2["approve"], test_size=0.2, random_state=5, stratify=data2["approve"])
 #Rééquilibrage de la BDD d'entrainement
 os = SMOTE(random_state=1)
 os_data_X,os_data_y=os.fit_sample(data_X, data_y)
