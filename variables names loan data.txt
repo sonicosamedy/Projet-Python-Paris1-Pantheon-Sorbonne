@@ -1,8 +1,0 @@
-occ       loanamt   action    msa       suffolk   appinc    typur     unit
-married   dep       emp       yjob      self      atotinc   cototinc  hexp     
-price     other     liq       rep       gdlin     lines     mortg     cons     
-pubrec    hrat      obrat     fixadj    term      apr       prop      inss     
-inson     gift      cosign    unver     review    netw      unem      min30    
-bd        mi        old       vr        sch       black     hispan    male     
-reject    approve   mortno    mortperf  mortlat1  mortlat2  chist     multi    
-loanprc   thick     white
